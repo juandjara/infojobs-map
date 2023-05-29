@@ -2,7 +2,7 @@ import type { DictionaryID } from "@/lib/DictionaryID"
 import type { OfferDictionary, OfferFacet, OfferItem } from "@/lib/infojobs.api.server"
 import { SIDEBAR_WIDTH } from "@/lib/styles"
 import type { RootData } from "@/routes"
-import { useRouteLoaderData } from "@remix-run/react"
+import { useRouteLoaderData, useSearchParams } from "@remix-run/react"
 import placeholderLogo from '@/assets/pic-company-logo.png'
 
 function formatNumber(n: number) {
@@ -30,13 +30,19 @@ function formatFacet(facet: OfferFacet, offer: OfferItem) {
 
 export default function Sidebar() {
   const { offers } = useRouteLoaderData('routes/index') as RootData
-  console.log(offers.items[1])
+  const [params, setParams] = useSearchParams()
+  const defaultQ = params.get('q') || ''
 
   return (
-    <div className="h-screen overflow-y-auto p-3 bg-white w-full" style={{ maxWidth: SIDEBAR_WIDTH }}>
-      <h1 className="mt-4 mb-2 text-4xl text-gray-800">InfoJobs Map Viewer</h1>
-      <p className="mb-4 text-lg text-gray-500 font-medium">{formatNumber(offers.totalResults)} ofertas</p>
-      <form className="flex items-center mb-2">
+    <div className="dark:bg-slate-800 dark:text-white h-screen overflow-y-auto p-3 bg-white w-full" style={{ maxWidth: SIDEBAR_WIDTH }}>
+      <h1 className="mt-4 mb-2 text-4xl dark:text-gray-100 text-gray-800">InfoJobs Map Viewer</h1>
+      <p className="mb-4 text-lg dark:text-gray-300 text-gray-500 font-medium">{formatNumber(offers.totalResults)} ofertas</p>
+      <form onSubmit={(ev) => {
+        const fd = new FormData(ev.currentTarget)
+        const q = fd.get('q') as string
+        ev.preventDefault()
+        setParams({ q })
+      }} className="flex items-center mb-2">
         <label htmlFor="simple-search" className="sr-only">Search</label>
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -50,17 +56,18 @@ export default function Sidebar() {
             </svg>
           </div>
           <input
-            type="text"
+            type="search"
             id="simple-search"
+            name="q"
+            defaultValue={defaultQ}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 placeholder:font-medium dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Buscar por palabras clave"
-            required
           />
         </div>
       </form>
       <ul className="-mx-3 divide-y divide-gray-200">
         {offers.items.map(offer => (
-          <li key={offer.id} className="p-3 hover:bg-gray-100">
+          <li key={offer.id} className="p-3 hover:bg-gray-100 dark:hover:bg-slate-700">
             <div className="flex gap-3 items-start justify-start">
               <img
                 className="border border-gray-200 rounded-md w-20 h-20 bg-gray-300"
@@ -70,7 +77,7 @@ export default function Sidebar() {
               <div>
                 <p className="">{offer.title}</p>
                 <p className="text-sm text-blue-500">{offer.author.name}</p>
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm dark:text-gray-300 text-gray-600">
                   <span>{offer.city} ({offer.province.value})</span>
                   {offer?.teleworking ? (
                     <span>{' – '}{offer.teleworking?.value}</span>
@@ -82,12 +89,12 @@ export default function Sidebar() {
               {offers.facets
                 .filter(f => filterFacet(f, offer))
                 .map(facet => (
-                  <span key={facet.key} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-2">
+                  <span key={facet.key} className="inline-block dark:text-gray-100 dark:bg-slate-600 bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-2">
                     {facet.name}: {formatFacet(facet, offer)}
                   </span>
                 ))}
             </div>
-            <p className="m-2 text-xs font-medium text-gray-500">
+            <p className="m-2 mb-1 text-xs font-medium dark:text-gray-300 text-gray-500">
               {offer.updated ? 'Actualizado el ' : 'Publicado el '}
               {new Date(offer.updated || offer.published).toLocaleString('es', { dateStyle: 'medium' })}
               {' a las '}
