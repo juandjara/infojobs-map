@@ -1,26 +1,19 @@
-import { Form, useRouteLoaderData, useSearchParams } from '@remix-run/react'
 import type { DictionaryID } from '@/lib/DictionaryID'
+import type { RootData } from '@/routes'
+import { Form, useRouteLoaderData, useSearchParams } from '@remix-run/react'
 import { GlobeAltIcon, GlobeEuropeAfricaIcon, HashtagIcon, HomeIcon, TagIcon } from '@heroicons/react/24/outline'
-import captialize from '@/lib/captialize'
 import { LocalComboBox } from '../LocalComboBox'
 import Select from '../Select'
-import type { RootData } from '@/routes'
+import facetConfig from '@/lib/facetConfig'
+import { capitalize, camelCaseToKebabCase, kebabCaseToCamelCase } from '@/lib/casing'
 
 type SelectItem = { label: string; value: string }
-
-function kebabCaseToCamelCase(text: string) {
-  return text.replace(/-([a-z])/g, (g) => g[1].toUpperCase())
-}
-
-function camelCaseToKebabCase(text: string) {
-  return text.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
-}
 
 function useDictionaryOptions(id: DictionaryID) {
   const { offers } = useRouteLoaderData('routes/index') as RootData
   const facet = offers.facets.find(f => f.key === kebabCaseToCamelCase(id))
   const options = facet?.values.map((v) => ({ label: v.value, value: v.key })) || []
-  return { options, name: facet?.name || captialize(id) }
+  return { options, name: facet?.name || capitalize(id) }
 }
 
 function DictionarySelectSingle({ id }: { id: DictionaryID }) {
@@ -103,19 +96,6 @@ function DictionarySelect({ id }: { id: DictionaryID }) {
     </div>
   )
 }
-
-const facetConfig = [
-  { id: 'country', multiple: false },
-  { id: 'province', multiple: true },
-  { id: 'city', multiple: true },
-  { id: 'category', multiple: true },
-  { id: 'subcategory', multiple: true },
-  { id: 'salary-period', multiple: false },
-  { id: 'study', multiple: false },
-  { id: 'contract-type', multiple: false },
-  { id: 'workday', multiple: false },
-  { id: 'teleworking', multiple: true }
-] as { id: DictionaryID, multiple: boolean }[]
 
 export default function MapTopLeft() {
   const { offers } = useRouteLoaderData('routes/index') as RootData

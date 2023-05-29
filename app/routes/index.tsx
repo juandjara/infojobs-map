@@ -1,3 +1,4 @@
+import Sidebar from "@/components/Sidebar"
 import MapFallback from "@/components/map/MapFallback"
 import MapTopLeft from "@/components/map/MapTopLeft"
 import type { OfferPageData} from "@/lib/infojobs.api.server"
@@ -38,9 +39,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
   return (
-    <div>
-      <MapTopLeft />
-      <ClientOnly fallback={<MapFallback />}>{() => <Map />}</ClientOnly>
+    <div className="flex">
+      <Sidebar />
+      <div className="relative w-full">
+        <MapTopLeft />
+        <ClientOnly fallback={<MapFallback />}>{() => <Map />}</ClientOnly>
+      </div>
       <Outlet />
     </div>
   )

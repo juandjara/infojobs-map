@@ -72,21 +72,21 @@ export type OfferPageData = {
   items: OfferItem[]
   offers: OfferItem[]
 }
-type OfferDictionary = {
+export type OfferDictionary = {
   id: number
   value: string
 }
-type OfferFacet = {
+export type OfferFacet = {
   key: string // camelCase version of DictionaryID
   name: string // spanish title
   values: OfferFacetValue[]
 }
-type OfferFacetValue = {
+export type OfferFacetValue = {
   count: number
   key: string
   value: string
 }
-type OfferItem = {
+export type OfferItem = {
   applications: string
   author: OfferAuthor
   category: OfferDictionary
@@ -117,6 +117,7 @@ type OfferAuthor = {
   name: string
   privateId: number
   showCorporativeHeader: boolean
+  logoUrl: string // URL "https://multimedia.infojobs.net/api/..."
   uri: string // URL "https://$company_id.ofertas-trabajo.infojobs.net"
 }
 

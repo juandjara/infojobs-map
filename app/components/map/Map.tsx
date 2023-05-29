@@ -1,13 +1,15 @@
+import type { RootData } from '@/routes'
+import type { DictionaryID } from '@/lib/DictionaryID'
+import type { PickingInfo } from '@deck.gl/core/typed'
 import type { MapboxOverlayProps } from '@deck.gl/mapbox/typed'
-import { MapboxOverlay } from '@deck.gl/mapbox/typed'
-import type { MapProps} from "react-map-gl"
-import { Map, useControl } from "react-map-gl"
+import type { MapProps } from "react-map-gl"
 import maplibregl from "maplibre-gl"
+import { MapboxOverlay } from '@deck.gl/mapbox/typed'
+import { Map, useControl } from "react-map-gl"
 import { GeoJsonLayer } from '@deck.gl/layers/typed'
 import { useRouteLoaderData, useSearchParams } from '@remix-run/react'
-import type { RootData } from '@/routes'
+import { MAP_WIDTH } from '@/lib/styles'
 import IconClusterLayer from './IconClusterLayer'
-import { DictionaryID } from '@/lib/DictionaryID'
 
 const INITIAL_VIEW_STATE = {
   longitude: -3.762796,
@@ -99,8 +101,31 @@ export default function MapContainer() {
     })
   }
 
+  function getTooltip({ object, layer }: PickingInfo) {
+    if (!object) return null
+    
+    let text = ''
+    if (layer?.id === 'provinces') {
+      text = object && `${object.properties.name} - ${object.properties.count} ofertas`
+    }
+    if (layer?.id === 'cities') {
+      if (object.properties.cluster) {
+        text = object && `${object.properties.point_count_abbreviated} ciudades - ${object.properties.count} ofertas`
+      } else {
+        text = `${object.properties.name} - ${object.properties.count} ofertas`
+      }
+    }
+    return {
+      style: { borderRadius: '8px', fontSize: '16px', padding: '12px', background: 'rgba(0, 0, 0, 0.8)', color: 'white' },
+      text
+    }
+  }
+
   return (
-    <div className='overflow-hidden w-screen h-screen absolute inset-0'>
+    <div
+      style={{ maxWidth: MAP_WIDTH }}
+      className='overflow-hidden w-full h-screen absolute inset-0 bg-gray-200'
+    >
       <Map
         mapLib={maplibregl}
         mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
@@ -109,27 +134,7 @@ export default function MapContainer() {
         <DeckGLOverlay
           interleaved={false}
           layers={layers}
-          getTooltip={
-            ({ object, layer }) => {
-              if (!object) return null
-              
-              let text = ''
-              if (layer?.id === 'provinces') {
-                text = object && `${object.properties.name} - ${object.properties.count} ofertas`
-              }
-              if (layer?.id === 'cities') {
-                if (object.properties.cluster) {
-                  text = object && `${object.properties.point_count_abbreviated} ciudades - ${object.properties.count} ofertas`
-                } else {
-                  text = `${object.properties.name} - ${object.properties.count} ofertas`
-                }
-              }
-              return {
-                style: { borderRadius: '8px', fontSize: '16px', padding: '12px', background: 'rgba(0, 0, 0, 0.8)', color: 'white' },
-                text
-              }
-            }
-          }
+          getTooltip={getTooltip}
         />
       </Map>
     </div>
