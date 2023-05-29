@@ -32,6 +32,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     teleworking: params.getAll('teleworking'),
     contractType: params.getAll('contract-type'),
     employerId: params.get('employerId') || undefined,
+    study: params.getAll('study')
   })
 
   return {

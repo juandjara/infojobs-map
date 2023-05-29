@@ -7,7 +7,7 @@ import type { DictionaryID } from "./DictionaryID"
   { id: 'category', multiple: true },
   { id: 'subcategory', multiple: true },
   { id: 'salary-period', multiple: false },
-  { id: 'study', multiple: false },
+  { id: 'study', multiple: true },
   { id: 'contract-type', multiple: true },
   { id: 'workday', multiple: false },
   { id: 'teleworking', multiple: true }

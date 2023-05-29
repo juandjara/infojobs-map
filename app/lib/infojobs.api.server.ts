@@ -58,6 +58,7 @@ type OfferSearchParams = {
   sinceDate?: OfferDateOption // when was the offer last published / updated. default ANY
   teleworking?: string[] // keys from getDictionary('teleworking')
   contractType?: string[] // keys from getDictionary('contract-type')
+  study?: string[] // keys from getDictionary('study')
 }
 
 export type OfferPageData = {
