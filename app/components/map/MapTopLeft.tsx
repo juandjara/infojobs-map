@@ -1,35 +1,12 @@
 import { Form, useRouteLoaderData, useSearchParams } from '@remix-run/react'
 import type { DictionaryID } from '@/lib/DictionaryID'
-import { GlobeAltIcon, GlobeEuropeAfricaIcon, HashtagIcon, HomeIcon, TagIcon } from '@heroicons/react/20/solid'
+import { GlobeAltIcon, GlobeEuropeAfricaIcon, HashtagIcon, HomeIcon, TagIcon } from '@heroicons/react/24/outline'
 import captialize from '@/lib/captialize'
-import type { OfferPageData } from '@/lib/infojobs.api.server'
-import { LocalComboBox } from './LocalComboBox'
-import Select from './Select'
+import { LocalComboBox } from '../LocalComboBox'
+import Select from '../Select'
+import type { RootData } from '@/routes'
 
 type SelectItem = { label: string; value: string }
-
-// function getParentDictID(id: DictionaryID): DictionaryID | null {
-//   switch (id) {
-//     case 'province':
-//       return 'country'
-//     case 'city':
-//       return 'province'
-//     case 'country':
-//       return 'city'
-//     case 'subcategory':
-//       return 'category'
-//     case 'study-detail':
-//       return 'study'
-//     default:
-//       return null
-//   }
-// }
-
-// function getParentFromURL(id: DictionaryID, params: URLSearchParams) {
-//   const parentId = getParentDictID(id)
-//   if (!parentId) return null
-//   return params.get(parentId)
-// }
 
 function kebabCaseToCamelCase(text: string) {
   return text.replace(/-([a-z])/g, (g) => g[1].toUpperCase())
@@ -40,8 +17,8 @@ function camelCaseToKebabCase(text: string) {
 }
 
 function useDictionaryOptions(id: DictionaryID) {
-  const { facets } = useRouteLoaderData('routes/index') as OfferPageData
-  const facet = facets.find(f => f.key === kebabCaseToCamelCase(id))
+  const { offers } = useRouteLoaderData('routes/index') as RootData
+  const facet = offers.facets.find(f => f.key === kebabCaseToCamelCase(id))
   const options = facet?.values.map((v) => ({ label: v.value, value: v.key })) || []
   return { options, name: facet?.name || captialize(id) }
 }
@@ -56,11 +33,10 @@ function DictionarySelectSingle({ id }: { id: DictionaryID }) {
     country: <GlobeAltIcon className='w-5 h-5' />,
     province: <GlobeEuropeAfricaIcon className='w-5 h-5' />,
     city: <HomeIcon className='w-5 h-5' />,
-    category: <HashtagIcon className='w-5 h-5' />,
-    subcategory: <TagIcon className='w-5 h-5' />,
+    category: <HashtagIcon className='w-5 h-5' />
   } as Record<DictionaryID, JSX.Element>
 
-  const icon = iconMap[id]
+  const icon = iconMap[id] || <TagIcon className='w-5 h-5' />
 
   function onSelect(item: SelectItem) {
     setParams(prev => {
@@ -96,11 +72,10 @@ function DictionarySelect({ id }: { id: DictionaryID }) {
     country: <GlobeAltIcon className='w-5 h-5' />,
     province: <GlobeEuropeAfricaIcon className='w-5 h-5' />,
     city: <HomeIcon className='w-5 h-5' />,
-    category: <HashtagIcon className='w-5 h-5' />,
-    subcategory: <TagIcon className='w-5 h-5' />,
+    category: <HashtagIcon className='w-5 h-5' />
   } as Record<DictionaryID, JSX.Element>
 
-  const icon = iconMap[id]
+  const icon = iconMap[id] || <TagIcon className='w-5 h-5' />
 
   function onSelect(items: SelectItem[]) {
     setParams(prev => {
@@ -143,12 +118,12 @@ const facetConfig = [
 ] as { id: DictionaryID, multiple: boolean }[]
 
 export default function MapTopLeft() {
-  const { facets } = useRouteLoaderData('routes/index') as OfferPageData
-  const facetKeys = facets.map(f => camelCaseToKebabCase(f.key))
+  const { offers } = useRouteLoaderData('routes/index') as RootData
+  const facetKeys = offers.facets.map(f => camelCaseToKebabCase(f.key))
   const availableFacets = facetConfig.filter(f => facetKeys.includes(f.id))
 
   return (
-    <header className='absolute z-10 top-0 inset-x-0 p-2'>
+    <header className='absolute z-10 top-0 left-0 p-2'>
       <Form className='flex flex-col flex-wrap items-start justify-start gap-2'>
         {availableFacets.map(({ id, multiple }) => {
           return multiple

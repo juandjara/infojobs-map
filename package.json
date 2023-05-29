@@ -17,7 +17,10 @@
     "@remix-run/node": "^1.16.0",
     "@remix-run/react": "^1.16.0",
     "@remix-run/serve": "^1.16.0",
+    "@turf/centroid": "^6.5.0",
+    "@turf/helpers": "^6.5.0",
     "@types/debounce": "^1.2.1",
+    "@types/supercluster": "^7.1.0",
     "debounce": "^1.2.1",
     "isbot": "^3.6.6",
     "mapbox-gl": "npm:empty-npm-package@^1.0.0",
@@ -25,7 +28,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-map-gl": "^7.0.23",
-    "remix-utils": "^6.3.0"
+    "remix-utils": "^6.3.0",
+    "supercluster": "^8.0.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.16.0",
