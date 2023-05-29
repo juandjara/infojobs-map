@@ -34,6 +34,10 @@ export default function Sidebar() {
   const [params, setParams] = useSearchParams()
   const defaultQ = params.get('q') || ''
 
+  function selectItem(offer: OfferItem) {
+    window.open(offer.link, '_blank', 'noopener')
+  }
+
   return (
     <div className="dark:bg-slate-800 dark:text-white h-screen overflow-y-auto p-3 bg-white w-full" style={{ maxWidth: SIDEBAR_WIDTH }}>
       <header className="sticky -top-3 bg-white dark:bg-slate-800">
@@ -80,39 +84,41 @@ export default function Sidebar() {
       </header>
       <ul className="-mx-3 divide-y divide-gray-200 dark:divide-gray-500">
         {offers.items.map(offer => (
-          <li key={offer.id} className="p-3 hover:bg-gray-100 dark:hover:bg-slate-700">
-            <div className="flex gap-3 items-start justify-start">
-              <img
-                className="border border-gray-200 dark:border-gray-500 rounded-md w-20 h-20 bg-gray-300"
-                src={offer.author.logoUrl || placeholderLogo}
-                alt="company logo"
-              />
-              <div>
-                <p className="">{offer.title}</p>
-                <p className="text-sm text-blue-500">{offer.author.name}</p>
-                <p className="mt-1 text-sm dark:text-gray-300 text-gray-600">
-                  <span>{offer.city} ({offer.province.value})</span>
-                  {offer?.teleworking ? (
-                    <span>{' – '}{offer.teleworking?.value}</span>
-                  ) : null}
-                </p>
+          <li key={offer.id} className="hover:bg-gray-100 dark:hover:bg-slate-700">
+            <a href={offer.link} target="_blank" rel="noopener noreferrer" className="p-3 block">
+              <div className="flex gap-3 items-start justify-start">
+                <img
+                  className="border border-gray-200 dark:border-gray-500 rounded-md w-20 h-20 bg-gray-300"
+                  src={offer.author.logoUrl || placeholderLogo}
+                  alt="company logo"
+                />
+                <div>
+                  <p className="">{offer.title}</p>
+                  <p className="text-sm text-blue-500">{offer.author.name}</p>
+                  <p className="mt-1 text-sm dark:text-gray-300 text-gray-600">
+                    <span>{offer.city} ({offer.province.value})</span>
+                    {offer?.teleworking ? (
+                      <span>{' – '}{offer.teleworking?.value}</span>
+                    ) : null}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="tags mt-3">
-              {offers.facets
-                .filter(f => filterFacet(f, offer))
-                .map(facet => (
-                  <span key={facet.key} className="inline-block dark:text-gray-100 dark:bg-slate-600 bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-2">
-                    {facet.name}: {formatFacet(facet, offer)}
-                  </span>
-                ))}
-            </div>
-            <p className="m-2 mb-1 text-xs font-medium dark:text-gray-300 text-gray-500">
-              {offer.updated ? 'Actualizado el ' : 'Publicado el '}
-              {new Date(offer.updated || offer.published).toLocaleString('es', { dateStyle: 'medium' })}
-              {' a las '}
-              {new Date(offer.updated || offer.published).toLocaleTimeString('es', { timeStyle: 'short' })}
-            </p>
+              <div className="tags mt-3">
+                {offers.facets
+                  .filter(f => filterFacet(f, offer))
+                  .map(facet => (
+                    <span key={facet.key} className="inline-block dark:text-gray-100 dark:bg-slate-600 bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-2">
+                      {facet.name}: {formatFacet(facet, offer)}
+                    </span>
+                  ))}
+              </div>
+              <p className="m-2 mb-1 text-xs font-medium dark:text-gray-300 text-gray-500">
+                {offer.updated ? 'Actualizado el ' : 'Publicado el '}
+                {new Date(offer.updated || offer.published).toLocaleString('es', { dateStyle: 'medium' })}
+                {' a las '}
+                {new Date(offer.updated || offer.published).toLocaleTimeString('es', { timeStyle: 'short' })}
+              </p>
+            </a>
           </li>
         ))}
       </ul>
