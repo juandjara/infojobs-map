@@ -27,6 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     category: params.getAll('category'),
     subcategory: params.getAll('subcategory'),
     facets: true,
+    page: Number(params.get('page')) || 1,
     maxResults: 50
   })
 

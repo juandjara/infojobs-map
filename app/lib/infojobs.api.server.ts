@@ -135,7 +135,6 @@ function createURLParams(params: Record<string, string | number | boolean | stri
 
 export async function getOffers(params: OfferSearchParams) {
   const query = createURLParams(params)
-  console.log(query.toString())
   const data = await request(`/offer?${query.toString()}`)
   return data as OfferPageData
 }

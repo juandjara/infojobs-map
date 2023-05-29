@@ -15,7 +15,7 @@ export function getProvinceLayerData(facets: OfferPageData['facets']) {
 
 export function getCityLayerData(facets: OfferPageData['facets']) {
   const availableCities = facets.find(f => f.key === 'city')?.values || []
-  return availableCities
+  const layerData = availableCities
     .filter(c => (citiesMapData as CityMap)[c.key])
     .map(c => {
       const city = (citiesMapData as CityMap)[c.key]
@@ -26,5 +26,7 @@ export function getCityLayerData(facets: OfferPageData['facets']) {
         coordinates: city.coordinates.reverse(),
       }
     })
-    .sort((a, b) => a!.count - b!.count)
+
+  layerData.sort((a, b) => a!.count - b!.count)
+  return layerData
 }

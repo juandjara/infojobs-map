@@ -71,5 +71,5 @@ export const iconCN = {
   small: `w-5 h-5 ${iconColor}`,
 }
 
-export const SIDEBAR_WIDTH = 384
+export const SIDEBAR_WIDTH = 420
 export const MAP_WIDTH = `calc(100vw - ${SIDEBAR_WIDTH}px)`
