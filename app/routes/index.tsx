@@ -28,7 +28,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     subcategory: params.getAll('subcategory'),
     facets: true,
     page: Number(params.get('page')) || 1,
-    maxResults: 50
+    maxResults: 50,
+    teleworking: params.getAll('teleworking'),
+    contractType: params.getAll('contract-type'),
+    employerId: params.get('employerId') || undefined,
   })
 
   return {
