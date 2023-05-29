@@ -33,9 +33,10 @@ function DictionarySelectSingle({ id }: { id: DictionaryID }) {
 
   function onSelect(item: SelectItem) {
     setParams(prev => {
-      prev.delete(id)
-      if (item?.value) {
-        prev.append(id, item.value)
+      if (item?.value && !prev.has(id)) {
+        prev.set(id, item?.value)
+      } else {
+        prev.delete(id)
       }
       return prev
     })
