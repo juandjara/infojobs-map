@@ -12,6 +12,7 @@ Tech stack used:
 - HeroIcons
 - Deck.gl
 - MaplibreGL
+- supercluster
 - CARTO Basemaps
 
 ## Local development
