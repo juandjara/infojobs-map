@@ -1,16 +1,22 @@
-# Welcome to Remix!
+# Infojobs Map
 
-- [Remix Docs](https://remix.run/docs)
+This project was built using the [**remix-tailwind-starter**](https://github.com/juandjara/remix-tailwind-starter) project template.
 
-This is the [**remix-tailwind-starter**](https://github.com/juandjara/remix-tailwind-starter) by juandjara. It contains just the basic remix example but with some conventions I like better, some fixes and some tweaks and touches.
+This is a small PoC for a geographical-based search of job offers in InfoJobs. It only uses the `/offer` public endpoint of the InfoJobs API, building the map layers combining local geojson sources and the counts and keys from the `facets` returned in that endpoint
 
-* Absolute imports are used with `@/` instead of `~/`
-* An animated [GlobalSpinner](./app/components/GlobalSpiner.tsx) component is added to [`root.tsx`](./app/root.tsx)
-* Custom [LiveReload component](./app/components/LiveReload.tsx) to fix weird redirect behaviour on firefox due to websocket issues as in [remix issue #2997](https://github.com/remix-run/remix/issues/2997)
-* Styled global `ErrorBoundary` and `CatchBoundary` components in [`root.tsx`](./app/root.tsx)
-* edit `.eslintrc` to mark extra semicolons as errors
+## Local development
 
-## Fly Setup
+You will need to copy the `.env.example` to a `.env` file in the same folder and write your infojobs API key there
+
+From your terminal:
+
+```sh
+npm run dev
+```
+
+This starts your app in development mode, rebuilding assets on file changes.
+
+## Setup for deploying on Fly
 
 1. [Install `flyctl`](https://fly.io/docs/getting-started/installing-flyctl/)
 
@@ -25,16 +31,6 @@ flyctl auth signup
 ```sh
 flyctl launch
 ```
-
-## Development
-
-From your terminal:
-
-```sh
-npm run dev
-```
-
-This starts your app in development mode, rebuilding assets on file changes.
 
 ## Deployment
 
