@@ -2,7 +2,17 @@
 
 This project was built using the [**remix-tailwind-starter**](https://github.com/juandjara/remix-tailwind-starter) project template.
 
-This is a small PoC for a geographical-based search of job offers in InfoJobs. It only uses the `/offer` public endpoint of the InfoJobs API, building the map layers combining local geojson sources and the counts and keys from the `facets` returned in that endpoint
+This is a small PoC for a geographical-based search of job offers in InfoJobs. It only uses the `/offer` public endpoint of the InfoJobs API, building the map layers combining local geojson sources and the counts and keys from the `facets` returned in that endpoint. The data shown in the map always corresponds to the `city` and `province` facet data returned every time filters are changed. When two or more points are close together, clustering is applied on the client side. 
+
+Tech stack used:
+- Remix
+- Tailwind
+- Typescript
+- Headless UI
+- HeroIcons
+- Deck.gl
+- MaplibreGL
+- CARTO Basemaps
 
 ## Local development
 
